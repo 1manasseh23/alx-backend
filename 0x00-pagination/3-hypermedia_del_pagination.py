@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" a get_hyper_index method with two integer arguments: index with
+"""This a get_hyper_index method with two integer arguments: index with
 a None default value and page_size with default value of 10
 
 Return a dictionary with the following key-value pairs:
@@ -11,7 +11,7 @@ next_index: the next index to query with. That should be the index of the
 first item after the last item on the current page.
 page_size: the current page size
 data: the actual page of the dataset"""
-from typing import List, Dict
+from typing import Dict, List
 import csv
 
 
@@ -31,7 +31,8 @@ class Server:
             with open(self.DATA_FILE) as f:
                 reader = csv.reader(f)
                 dataset = [row for row in reader]
-            self.__dataset = dataset[1:]  # skip header row
+            self.__dataset = dataset[1:]
+
         return self.__dataset
 
     def indexed_dataset(self) -> Dict[int, List]:
@@ -39,31 +40,32 @@ class Server:
         """
         if self.__indexed_dataset is None:
             dataset = self.dataset()
+            truncated_dataset = dataset[:1000]
             self.__indexed_dataset = {
                 i: dataset[i] for i in range(len(dataset))
             }
         return self.__indexed_dataset
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
+        assert index is None or isinstance(index, int), \
+            "Index must be an integer or None."
+        assert isinstance(page_size, int) and page_size > 0, \
+            "Page size must be a positive integer."
+
         dataset = self.indexed_dataset()
+        total_items = len(dataset)
 
         if index is None:
             index = 0
+        else:
+            assert 0 <= index < total_items, "Index is out of range."
 
-        assert 0 <= index < len(dataset), "Index out of range"
-
-        current_index = index
-        data = []
-        while len(data) < page_size and current_index < len(dataset):
-            if current_index in dataset:
-                data.append(dataset[current_index])
-            current_index += 1
-
-        next_index = current_index if current_index < len(dataset) else None
+        next_index = index + page_size
+        data = [dataset[i] for i in range(index, next_index) if i in dataset]
 
         return {
             'index': index,
-            'data': data,
+            'next_index': next_index,
             'page_size': page_size,
-            'next_index': next_index
+            'data': data
         }
