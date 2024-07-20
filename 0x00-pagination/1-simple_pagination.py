@@ -3,19 +3,8 @@
 two integer arguments page with default value 1 and
 page_size with default value 10"""
 import csv
+import math
 from typing import List
-
-
-def index_range(page, page_size):
-    """
-    Using index_range to find the correct indexes to paginate
-    the dataset correctly and return the appropriate page of
-    the dataset (i.e. the correct list of rows)
-    """
-
-    start_index = (page - 1) * page_size
-    end_index = start_index + page_size
-    return start_index, end_index
 
 
 class Server:
@@ -37,16 +26,40 @@ class Server:
 
         return self.__dataset
 
-    def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
+    def index_range(self, page: int, page_size: int) -> tuple:
+        """
+        Returns a tuple of size two containing a start index and an end index
+        corresponding to the range of indexes to return in a list for those
+        particular pagination parameters.
+        """
         assert isinstance(page, int) and page > 0, \
-                "Page must be a positive integer"
+            "Page must be a positive integer."
         assert isinstance(page_size, int) and page_size > 0, \
-            "Page size must be a positive integer"
+            "Page size must be a positive integer."
 
-        start_index, end_index = index_range(page, page_size)
         dataset = self.dataset()
+        total_items = len(dataset)
 
-        if start_index >= len(dataset):
+        start_index = (page - 1) * page_size
+        end_index = page * page_size
+
+        return (start_index, end_index)
+
+    def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
+        """ Returns a list of lists representing the corresponding page
+        containing the desired number of items.
+        """
+        assert isinstance(page, int) and page > 0, \
+            "Page must be a positive integer."
+        assert isinstance(page_size, int) and page_size > 0, \
+            "Page size must be a positive integer."
+
+        dataset = self.dataset()
+        total_items = len(dataset)
+
+        start_index, end_index = self.index_range(page, page_size)
+
+        if start_index >= total_items:
             return []
 
         return dataset[start_index:end_index]
