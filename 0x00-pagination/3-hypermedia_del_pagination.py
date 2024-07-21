@@ -13,7 +13,7 @@ page_size: the current page size
 data: the actual page of the dataset"""
 import csv
 import math
-from typing import List, Dict  # Import Dict from typing module
+from typing import List, Dict
 
 
 class Server:
