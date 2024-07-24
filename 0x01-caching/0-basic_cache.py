@@ -5,6 +5,7 @@
 # Import BaseCaching class from base_caching.py
 from base_caching import BaseCaching
 
+
 class BasicCache(BaseCaching):
     """ Defines a basic caching system that inherits from BaseCaching """
 
