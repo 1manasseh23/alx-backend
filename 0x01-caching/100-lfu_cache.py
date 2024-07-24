@@ -11,6 +11,7 @@ class LFUCache(BaseCaching):
         """ Initialize the LFUCache instance """
         super().__init__()
         self.frequency = {}
+        self.usage_order = []
 
     def put(self, key, item):
         """ Add an item in the cache """
@@ -65,4 +66,4 @@ class LFUCache(BaseCaching):
             self.usage_order.append(key)
             return self.cache_data[key]
         else:
-            return None 
+            return None
