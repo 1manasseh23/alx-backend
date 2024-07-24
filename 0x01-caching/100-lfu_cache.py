@@ -4,6 +4,7 @@
 
 from base_caching import BaseCaching
 
+
 class LFUCache(BaseCaching):
     """ Defines a LFU caching system """
 
@@ -17,7 +18,7 @@ class LFUCache(BaseCaching):
         """ Add an item in the cache """
         if key is None or item is None:
             return
-        
+
         # Check if key already exists
         if key in self.cache_data:
             # Update existing key's item
@@ -29,11 +30,15 @@ class LFUCache(BaseCaching):
             if len(self.cache_data) >= self.MAX_ITEMS:
                 # Find the item(s) with the minimum frequency
                 min_freq = min(self.frequency.values())
-                items_with_min_freq = [k for k, v in self.frequency.items() if v == min_freq]
-                
+                items_with_min_freq = [
+                        k for k, v in self.frequency.items() if v == min_freq]
+
                 # If there are ties, use LRU to discard
                 if len(items_with_min_freq) > 1:
-                    lru_key = min(self.usage_order, key=lambda k: self.usage_order.index(k))
+                    lru_key = min(
+                            self.usage_order,
+                            key=lambda k: self.usage_order.index(k)
+                            )
                     del self.cache_data[lru_key]
                     self.usage_order.remove(lru_key)
                     del self.frequency[lru_key]
@@ -43,10 +48,10 @@ class LFUCache(BaseCaching):
                     del self.cache_data[discard_key]
                     del self.frequency[discard_key]
                     print(f"DISCARD: {discard_key}")
-            
+
             self.cache_data[key] = item
             self.frequency[key] = 1
-        
+
         # Update usage order for LRU
         if key in self.usage_order:
             self.usage_order.remove(key)
@@ -56,7 +61,7 @@ class LFUCache(BaseCaching):
         """ Get an item from the cache """
         if key is None:
             return None
-        
+
         if key in self.cache_data:
             # Increase frequency count
             self.frequency[key] += 1
