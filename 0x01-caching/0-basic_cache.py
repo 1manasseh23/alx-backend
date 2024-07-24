@@ -2,6 +2,8 @@
 """
 Module for BasicCache class that inherits from BaseCaching
 """
+BaseCaching = __import__('0-basic_cache').BaseCaching
+
 
 class BasicCache(BaseCaching):
     """
