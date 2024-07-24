@@ -4,6 +4,7 @@
 
 from base_caching import BaseCaching
 
+
 class LIFOCache(BaseCaching):
     """ Defines a LIFO caching system """
 
@@ -16,7 +17,7 @@ class LIFOCache(BaseCaching):
         """ Add an item in the cache """
         if key is None or item is None:
             return
-        
+
         if len(self.cache_data) >= self.MAX_ITEMS:
             # Find the last item added to the cache (most recent)
             last_key = self.insertion_order.pop()
@@ -30,5 +31,5 @@ class LIFOCache(BaseCaching):
         """ Get an item from the cache """
         if key is None:
             return None
-        
+
         return self.cache_data.get(key, None)
