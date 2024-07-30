@@ -3,7 +3,8 @@
 This a instantiate the Babel object in your app
 Store it in a module-level variable named babel.
 it use Config to set Babel’s default locale
-("en") and timezone ("UTC")."""
+("en") and timezone ("UTC")
+"""
 from flask import Flask, render_template
 from flask_babel import Babel
 
