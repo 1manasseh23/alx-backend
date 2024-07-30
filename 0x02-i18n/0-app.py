@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """This  a basic Flask app"""
-from app import app
 from flask import Flask, render_template
+
+app = Flask(__name__)
 
 
 @app.route('/')
