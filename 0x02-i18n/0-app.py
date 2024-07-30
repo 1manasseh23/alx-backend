@@ -7,6 +7,8 @@ from flask import Flask, render_template
 @app.route('/')
 @app.route('/index')
 def index():
+    """Retun 0-index.html"""
+
     return render_template('0-index.html')
 
 
