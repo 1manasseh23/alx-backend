@@ -1,38 +1,47 @@
 #!/usr/bin/env python3
-"""This the _ or gettext function to parametrize your
-templates. Use the message IDs home_title and home_header"""
-from flask import Flask, render_template, request
-from flask_babel import Babel, _
+"""Flask application with Babel for internationalization.
 
-# Instantiate the Babel object
-babel = Babel()
+This module sets up a basic Flask application with internationalization support
+using Flask-Babel. It configures the app to use different locales based on the
+client's preferred language.
+"""
+
+from flask import Flask, request, render_template
+from flask_babel import Babel, gettext as _
+
+app = Flask(__name__)
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr', 'es']
+
+babel = Babel(app)
 
 
-class Config:
-    LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = 'en'
-    BABEL_DEFAULT_TIMEZONE = 'UTC'
+@babel.localeselector
+def get_locale() -> str:
+    """Select the best language match from the supported languages.
+
+    Uses the `Accept-Language` header from the request to determine the best
+    language match among the supported locales.
+
+    Returns:
+        str: The selected locale code.
+    """
+    return request.accept_languages.best_match(
+        app.config['BABEL_SUPPORTED_LOCALES']
+    )
 
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object(Config)
+@app.route('/')
+def index() -> str:
+    """Render the index page.
 
-    # Initialize Babel with the Flask app
-    babel.init_app(app)
+    This route renders the index page using the appropriate locale.
 
-    @app.route('/')
-    def index():
-        return render_template('3-index.html')
-
-    @babel.localeselector
-    def get_locale():
-        # Get the best match with the supported languages
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-    return app
+    Returns:
+        str: Rendered HTML content of the index page.
+    """
+    return render_template('3-index.html')
 
 
 if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
+    app.run()
