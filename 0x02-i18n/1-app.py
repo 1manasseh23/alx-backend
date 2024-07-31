@@ -3,6 +3,7 @@
 This a instantiate the Babel object in your app
 Store it in a module-level variable named babel
 """
+
 from flask import Flask, render_template
 from flask_babel import Babel
 
@@ -20,6 +21,7 @@ class Config:
 
 
 def create_app():
+    """create flask app"""
 
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -37,5 +39,6 @@ def create_app():
 
 
 if __name__ == "__main__":
+    """run the app"""
     app = create_app()
     app.run(debug=True)
