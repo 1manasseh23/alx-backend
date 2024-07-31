@@ -37,6 +37,7 @@ def get_user() -> dict:
     Returns:
         dict: The user dictionary or None if not found.
     """
+
     user_id = request.args.get('login_as', type=int)
     return users.get(user_id)
 
@@ -49,6 +50,7 @@ def before_request() -> None:
     variable with the user data if available. This function
     runs before each request.
     """
+    
     g.user = get_user()
 
 
@@ -64,6 +66,7 @@ def get_locale() -> str:
     Returns:
         str: The selected locale code.
     """
+
     # Check if 'locale' parameter is in the URL query string
     locale_param = request.args.get('locale')
     if locale_param in app.config['BABEL_SUPPORTED_LOCALES']:
@@ -84,6 +87,7 @@ def index() -> str:
     Returns:
         str: Rendered HTML content of the index page.
     """
+    
     return render_template('5-index.html')
 
 
