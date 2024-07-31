@@ -2,7 +2,7 @@
 """Flask application with Babel for internationalization.
 
 This module sets up a basic Flask application with internationalization support
-using Flask-Babel. It configures the app to use different locales based on the 
+using Flask-Babel. It configures the app to use different locales based on the
 client's preferred language.
 """
 
