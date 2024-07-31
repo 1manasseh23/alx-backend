@@ -8,6 +8,12 @@ msgstr "Bienvenue chez Holberton"
 
 msgid "home_header"
 msgstr "Bonjour monde!"
+
+msgid "logged_in_as"
+msgstr "Vous êtes connecté en tant que %(username)s."
+
+msgid "not_logged_in"
+msgstr "Vous n'êtes pas connecté."
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-07-31 00:44+0000\n"
