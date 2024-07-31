@@ -4,6 +4,7 @@ This a get_locale function with the babel.localeselector
 decorator. Use request.accept_languages to determine the
 best match with our supported languages
 """
+
 from flask import Flask, render_template, request
 from flask_babel import Babel
 
@@ -19,6 +20,7 @@ class Config:
 
 
 def create_app():
+    """create flask"""
 
     app = Flask(__name__)
     # app.config.from_object(Config)
@@ -42,5 +44,6 @@ def create_app():
 
 
 if __name__ == "__main__":
+    """Run the app"""
     app = create_app()
     app.run(debug=True)
