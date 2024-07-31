@@ -7,7 +7,7 @@ client's preferred language.
 """
 
 from flask import Flask, request, render_template
-from flask_babel import Babel, gettext as _
+from flask_babel import Babel, get_locale, gettext as _
 
 app = Flask(__name__)
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
