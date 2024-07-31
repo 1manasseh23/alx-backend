@@ -1,42 +1,57 @@
 #!/usr/bin/env python3
-"""This a way to force a particular locale by passing the
-locale=fr parameter to your app’s URLs"""
-from flask import Flask, render_template, request
-from flask_babel import Babel, _
+"""Flask application with Babel for internationalization.
 
-# Instantiate the Babel object
-babel = Babel()
+This module sets up a basic Flask application with internationalization
+support using Flask-Babel. It allows forcing a locale via a URL parameter and
+falls back to the best match from the `Accept-Language` header if the
+parameter is not present.
+"""
+
+from flask import Flask, request, render_template
+from flask_babel import Babel, gettext as _
+
+app = Flask(__name__)
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr']
+
+babel = Babel(app)
 
 
-class Config:
-    LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = 'en'
-    BABEL_DEFAULT_TIMEZONE = 'UTC'
+@babel.localeselector
+def get_locale() -> str:
+    """Select the best language match from the supported languages.
+
+    Checks for a `locale` parameter in the request arguments. If present
+    and supported, uses it as the locale. Otherwise, falls back to the
+    `Accept-Language` header to determine the best language match
+    among the supported locales.
+
+    Returns:
+        str: The selected locale code.
+    """
+    # Check if 'locale' parameter is in the URL query string
+    locale_param = request.args.get('locale')
+    if locale_param in app.config['BABEL_SUPPORTED_LOCALES']:
+        return locale_param
+    # Fallback to the `Accept-Language` header
+    return request.accept_languages.best_match(
+        app.config['BABEL_SUPPORTED_LOCALES']
+    )
 
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object(Config)
+@app.route('/')
+def index() -> str:
+    """Render the index page.
 
-    # Initialize Babel with the Flask app
-    babel.init_app(app)
+    This route renders the index page using the appropriate locale, which
+    can be determined from the `locale` URL parameter or
+    the `Accept-Language` header.
 
-    @app.route('/')
-    def index():
-        return render_template('4-index.html')
-
-    @babel.localeselector
-    def get_locale():
-        # Check if locale is provided in URL parameters
-        locale = request.args.get('locale')
-        if locale in app.config['LANGUAGES']:
-            return locale
-        # Fallback to the best match with the supported languages
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-    return app
+    Returns:
+        str: Rendered HTML content of the index page.
+    """
+    return render_template('4-index.html')
 
 
 if __name__ == "__main__":
-    app = create_app()
-    app.run(debug=True)
+    app.run()
