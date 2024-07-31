@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""This  a user login system is outside the scope of this project
-To emulate a similar behavior"""
+"""This get_locale function to use a user’s preferred
+local if it is supported"""
 from flask import Flask, render_template, request, g
 from flask_babel import Babel, _
 
@@ -31,29 +31,36 @@ def create_app():
 
     @app.route('/')
     def index():
-        return render_template('5-index.html')
+        return render_template('6-index.html')
 
     @babel.localeselector
     def get_locale():
-        # Check if locale is provided in URL parameters
+        # 1. Check if locale is provided in URL parameters
         locale = request.args.get('locale')
         if locale in app.config['LANGUAGES']:
             return locale
-        # Fallback to the best match with the supported languages
+
+        # 2. Check if user is logged in and use their locale
+        if g.user and g.user['locale'] in app.config['LANGUAGES']:
+            return g.user['locale']
+
+        # 3. Fallback to the best match with the supported languages
         return request.accept_languages.best_match(app.config['LANGUAGES'])
 
-    def get_user():
-        user_id = request.args.get('login_as')
-        if user_id and user_id.isdigit():
-            user_id = int(user_id)
-            return users.get(user_id)
-        return None
-
-    @app.before_request
-    def before_request():
-        g.user = get_user()
-
     return app
+
+
+@app.before_request
+def before_request():
+    g.user = get_user()
+
+
+def get_user():
+    user_id = request.args.get('login_as')
+    if user_id and user_id.isdigit():
+        user_id = int(user_id)
+        return users.get(user_id)
+    return None
 
 
 if __name__ == "__main__":
