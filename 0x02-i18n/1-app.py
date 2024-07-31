@@ -13,7 +13,7 @@ babel = Babel()
 class Config:
     """Config to set Babel’s default
     locale ("en") and timezone ("UTC")"""
-i
+
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
