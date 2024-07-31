@@ -9,13 +9,13 @@ from flask_babel import Babel
 
 # Instantiate the Babel object
 babel = Babel()
-
-
+"""
 class Config:
 
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
+"""
 
 
 def create_app():
@@ -36,7 +36,7 @@ def create_app():
     def get_locale():
 
         # Get the best match with the supported languages
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
+        return request.accept_languages.best_match(["en", "fr"])
 
     return app
 
