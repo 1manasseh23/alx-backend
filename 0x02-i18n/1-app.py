@@ -27,7 +27,6 @@ def create_app():
     babel.init_app(app)
 
     @app.route('/')
-    @app.route('/index')
     def index():
         """Return 1-index.html"""
 
