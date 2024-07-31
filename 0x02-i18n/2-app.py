@@ -26,6 +26,7 @@ def get_locale() -> str:
     Returns:
         str: The selected locale code.
     """
+
     return request.accept_languages.best_match(
         app.config['BABEL_SUPPORTED_LOCALES']
     )
@@ -40,6 +41,7 @@ def index() -> str:
     Returns:
         str: Rendered HTML content of the index page.
     """
+
     return render_template('2-index.html')
 
 
