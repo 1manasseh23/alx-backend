@@ -25,15 +25,15 @@ def create_app():
     babel.init_app(app)
 
     @app.route('/')
-    @app.route('/index')
     def index():
+        """Return 2-index.html"""
 
         return render_template('2-index.html')
 
     @babel.localeselector
     def get_locale():
-        # Get the best match with the supported languages
 
+        # Get the best match with the supported languages
         return request.accept_languages.best_match(app.config['LANGUAGES'])
 
     return app
