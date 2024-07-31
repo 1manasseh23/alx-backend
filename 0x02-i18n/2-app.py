@@ -10,20 +10,12 @@ from flask_babel import Babel
 
 # Instantiate the Babel object
 babel = Babel()
-"""
-class Config:
-
-    LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = 'en'
-    BABEL_DEFAULT_TIMEZONE = 'UTC'
-"""
 
 
 def create_app():
     """create flask"""
 
     app = Flask(__name__)
-    # app.config.from_object(Config)
 
     # Initialize Babel with the Flask app
     babel.init_app(app)
