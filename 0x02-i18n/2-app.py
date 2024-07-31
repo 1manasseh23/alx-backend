@@ -21,7 +21,7 @@ class Config:
 def create_app():
 
     app = Flask(__name__)
-    app.config.from_object(Config)
+    # app.config.from_object(Config)
 
     # Initialize Babel with the Flask app
     babel.init_app(app)
