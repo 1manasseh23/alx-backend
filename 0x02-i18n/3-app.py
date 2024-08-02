@@ -1,51 +1,39 @@
 #!/usr/bin/env python3
-"""Flask application with Babel for internationalization.
-
-This module sets up a basic Flask application with internationalization support
-using Flask-Babel. It configures the app to use different locales based on the
-client's preferred language.
+"""A Basic Flask app with internationalization support.
 """
+from flask_babel import Babel
+from flask import Flask, render_template, request
 
-from flask import Flask, request, render_template
-from flask_babel import Babel, get_locale, gettext as _
+
+class Config:
+    """Represents a Flask Babel configuration.
+    """
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_LOCALE = "en"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
+
 
 app = Flask(__name__)
-app.config['BABEL_DEFAULT_LOCALE'] = 'en'
-app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr', 'es']
-
+app.config.from_object(Config)
+app.url_map.strict_slashes = False
 babel = Babel(app)
 
 
 @babel.localeselector
 def get_locale() -> str:
-    """Select the best language match from the supported languages.
-
-    Uses the `Accept-Language` header from the request to determine the best
-    language match among the supported locales.
-
-    Returns:
-        str: The selected locale code.
+    """Retrieves the locale for a web page.
     """
-
-    return request.accept_languages.best_match(
-        app.config['BABEL_SUPPORTED_LOCALES']
-    )
+    return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
 @app.route('/')
-def index() -> str:
-    """Render the index page.
-
-    This route renders the index page using the appropriate locale.
-
-    Returns:
-        str: Rendered HTML content of the index page.
+def get_index() -> str:
+    """The home/index page.
     """
-
     return render_template('3-index.html')
 
 
-if __name__ == "__main__":
-    """Run the app"""
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
 
     app.run()
